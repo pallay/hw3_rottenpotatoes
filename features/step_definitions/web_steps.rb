@@ -110,15 +110,15 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
   end
 end
 
-# Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
-#   regexp = Regexp.new(regexp)
-# 
-#   if page.respond_to? :should
-#     page.should have_xpath('//*', :text => regexp)
-#   else
-#     assert page.has_xpath?('//*', :text => regexp)
-#   end
-# end
+Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
+  regexp = Regexp.new(regexp)
+
+  if page.respond_to? :should
+    page.should have_xpath('//*', :text => regexp)
+  else
+    assert page.has_xpath?('//*', :text => regexp)
+  end
+end
 
 Then /^(?:|I )should not see "([^"]*)"$/ do |text|
   if page.respond_to? :should
@@ -128,16 +128,16 @@ Then /^(?:|I )should not see "([^"]*)"$/ do |text|
   end
 end
 
-# Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
-#   regexp = Regexp.new(regexp)
-# 
-#   if page.respond_to? :should
-#     page.should have_no_xpath('//*', :text => regexp)
-#   else
-#     assert page.has_no_xpath?('//*', :text => regexp)
-#   end
-# end
-# 
+Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
+  regexp = Regexp.new(regexp)
+
+  if page.respond_to? :should
+    page.should have_no_xpath('//*', :text => regexp)
+  else
+    assert page.has_no_xpath?('//*', :text => regexp)
+  end
+end
+
 Then /^the "([^"]*)" field(?: within (.*))? should contain "([^"]*)"$/ do |field, parent, value|
   with_scope(parent) do
     field = find_field(field)
@@ -226,7 +226,7 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
     end
   end
 end
- 
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
@@ -240,8 +240,8 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
   expected_params = {}
-  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')} 
-  
+  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')}
+
   if actual_params.respond_to? :should
     actual_params.should == expected_params
   else
@@ -252,3 +252,5 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+
