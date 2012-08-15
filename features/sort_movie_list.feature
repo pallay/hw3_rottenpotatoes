@@ -26,9 +26,11 @@ Background: movies have been added to database
     And I press "ratings_submit"
     When I follow "title_header"
     Then the movies should be sorted by title
+    Then I should see "Aladdin" before "Amelie"
 
   Scenario: sort movies in increasing order of release date
     Given I check the following ratings: G, R, PG-13, PG, NC-17
     And I press "ratings_submit"
     When I follow "release_date_header"
     Then the movies should be sorted by release_date
+    Then I should see "Amelie" before "Aladdin"
