@@ -33,4 +33,4 @@ Background: movies have been added to database
     And I press "ratings_submit"
     When I follow "release_date_header"
     Then the movies should be sorted by release_date
-    Then I should see "Amelie" before "Aladdin"
+    Then I should see "Aladdin" before "Amelie"

@@ -28,9 +28,8 @@ def add_prefix(prefix)
 end
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
-  # titles = page.all("table#movies tbody tr td[1]").map {|t| t.text}
-  # assert titles.index(e1) < titles.index(e2)
-  p page.body =~ /#.*{e1}.*#{e2}/
+  titles = page.all("table#movies tbody tr td[1]").map {|t| t.text}
+  assert titles.index(e1) < titles.index(e2)
 end
 
 Then /^I should see the following ratings: (.*)/ do |rating_list|
