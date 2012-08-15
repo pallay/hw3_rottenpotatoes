@@ -15,17 +15,16 @@ Given /the following movies exist/ do |movies_table|
   end
 end
 
-When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
+When /I (un)?check the following ratings: (.*)/ do |prefix, rating_list|
   rating_list.split(",").each do |field|
     field = field.strip
-    if uncheck == "un"
-       step %Q{I uncheck "ratings_#{field}"}
-       step %Q{the "ratings_#{field}" checkbox should not be checked}
-    else
-      step %Q{I check "ratings_#{field}"}
-      step %Q{the "ratings_#{field}" checkbox should be checked}
-    end
+    step %Q{I #{prefix}check "ratings_#{field}"}
+    step %Q{the "ratings_#{field}" checkbox should #{add_prefix(prefix)}be checked}
   end
+end
+
+def add_prefix(prefix)
+  (prefix == "un") ? 'not ' : nil
 end
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
@@ -55,4 +54,40 @@ end
 Then /^I should see no movies$/ do
   rows = page.all("table#movies tbody tr td[1]").map {|t| t.text}
   assert rows.size == 0
+end
+
+Then /I should(n't)? see: (.*)/ do |present, title_list|
+  titles = title_list.split(", ")
+  titles.each do |title|
+    if page.respond_to? :should
+      if present then
+        page.should have_content(title)
+      else
+        page.should have_content(title) == false
+      end
+    else
+      if present then
+        assert page.has_content?(title)
+      else
+        assert page.has_content?(title) == false
+      end
+    end
+  end
+end
+
+module Enumerable
+  def sorted?
+    each_cons(2).all? { |a, b| (a <=> b) <= 0 }
+  end
+end
+
+Then /^the movies should be sorted by (.+)$/ do |sort_field|
+  col_index = case sort_field
+    when "title" then 0
+    when "release_date" then 2
+    else raise ArgumentError
+  end
+
+  values = all("table#movies tbody tr").map { |row| row.all("td")[col_index].text }
+  assert values.sorted?
 end
